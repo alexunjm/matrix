@@ -138,9 +138,9 @@ test("operate scalar matrix", () => {
 test("primera parte elim gauss", () => {
 
   const m2 = new Matrix([
-    [ 0,  1, -1,   8],
+    [ 2,  1, -1,   8],
     [-3, -1,  2, -11],
-    [-2,  1,  2,  -3]
+    [-2,  1,  2,  -3],
   ]);
 
   // 1. Ir a la primera columna no cero de izquierda a derecha.
@@ -161,14 +161,13 @@ test("primera parte elim gauss", () => {
   expect(m2.get(2, 1)).toBe(0);
   expect(m2.get(3, 1)).toBe(0);
 });
-/*
 
 test("segunda parte elim gauss", () => {
 
   const m2 = new Matrix([
-    [1,  0,  5],
-    [0,  2,  3],
-    [0, -2, 4.5]
+    [ 2,  1, -1,   8],
+    [ 0,1/3,1/3, 2/3],
+    [ 0,  2,  1,  5],
   ]);
 
   // 1. Ir a la primera columna no cero de izquierda a derecha.
@@ -181,20 +180,16 @@ test("segunda parte elim gauss", () => {
   if (i != 2) {
     m2.swapRows(2, i);
   }
-  // [1,  0,  5],
-  // [0,  2,  3],
-  // [0, -2, 4.5]
   /**
    * 3. Luego, obtener ceros debajo de este elemento delantero, sumando 
    * múltiplos adecuados del renglón superior a los renglones debajo de él.
-   *  / 
+   *  */ 
   m2.colOperations(j, i);
-  // [1,  0,  5],
-  // [0,  2,  3],
-  // [0,  0, 7.5]
+  
   expect(m2.get(3, 2)).toBe(0);
+  logMatrix(m2);
 });
-
+/*
 
 test("primera y segunda parte", () => {
 
