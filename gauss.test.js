@@ -138,9 +138,9 @@ test("operate scalar matrix", () => {
 test("primera parte elim gauss", () => {
 
   const m2 = new Matrix([
-    [0, 0, 5],
-    [0, 2, 3],
-    [0, 2, 3]
+    [ 0,  1, -1,   8],
+    [-3, -1,  2, -11],
+    [-2,  1,  2,  -3]
   ]);
 
   // 1. Ir a la primera columna no cero de izquierda a derecha.
@@ -150,20 +150,18 @@ test("primera parte elim gauss", () => {
   if (i != 1) {
     m2.swapRows(1, i);
   }
-    // [0, 2, 3],
-    // [0, 0, 5],
-    // [0, 2, 3]
+  expect(m2.get(1, 1)).not.toBe(0);
+  
   /**
    * 3. Luego, obtener ceros debajo de este elemento delantero, sumando 
    * múltiplos adecuados del renglón superior a los renglones debajo de él.
    *  */ 
   m2.colOperations(j);
 
-  expect(m2.get(2, 2)).toBe(0);
-  expect(m2.get(3, 2)).toBe(0);
-  expect(m2.get(3, 3)).toBe(0);
+  expect(m2.get(2, 1)).toBe(0);
+  expect(m2.get(3, 1)).toBe(0);
 });
-
+/*
 
 test("segunda parte elim gauss", () => {
 
@@ -189,7 +187,7 @@ test("segunda parte elim gauss", () => {
   /**
    * 3. Luego, obtener ceros debajo de este elemento delantero, sumando 
    * múltiplos adecuados del renglón superior a los renglones debajo de él.
-   *  */ 
+   *  / 
   m2.colOperations(j, i);
   // [1,  0,  5],
   // [0,  2,  3],
@@ -219,7 +217,7 @@ test("primera y segunda parte", () => {
   /**
    * 3. Luego, obtener ceros debajo de este elemento delantero, sumando 
    * múltiplos adecuados del renglón superior a los renglones debajo de él.
-   *  */ 
+   *  / 
   m2.colOperations(j);
   // [1,  0,  5],
   // [0,  2,  3],
@@ -236,6 +234,45 @@ test("primera y segunda parte", () => {
     m2.swapRows(2, i);
   }
   m2.colOperations(2, 2);
-  logMatrix(m2);
   expect(m2.get(3, 2)).toBe(0);
 });
+
+
+test("elim gauss", () => {
+
+  const m2 = new Matrix([
+    [1, 0, 5],
+    [2, 2, 3],
+    [3, 4, 1]
+  ]);
+  logMatrix(m2);
+
+  let i, j, fnz;
+  for (let index = 1; index < m2.arr[0].length; index++) {
+    
+    // 1. Ir a la primera columna no cero de izquierda a derecha.
+    fnz = m2.getFirstNonZeroColumnIndex({returnIJ: true, from: {i: index, j: index}});
+    i = fnz.i;
+    j = fnz.j;
+    
+    // 2. Si la primera fila tiene un cero en esta columna, intercambiarlo con otra que no lo tenga.
+    if (i != index) {
+      m2.swapRows(index, i);
+    }
+    /**
+     * 3. Luego, obtener ceros debajo de este elemento delantero, sumando 
+     * múltiplos adecuados del renglón superior a los renglones debajo de él.
+     *  / 
+    m2.colOperations(j, i);
+    if (index == 1) {
+      expect(m2.get(2, 1)).toBe(0);
+      expect(m2.get(3, 1)).toBe(0);
+    }
+    if (index == 2) {
+      expect(m2.get(3, 2)).toBe(0);
+    }
+    logMatrix(m2);
+
+  }
+  expect(m2.get(3, 2)).toBe(0);
+});*/

@@ -74,30 +74,31 @@ class Matrix {
    * @memberof Matrix
    */
   colOperations(j, i = 1) {
+    console.log('operacion de eliminación; pivote:', i, j);
     
-    let col = j-1;
+    let row = i-1, col = j-1;
     let pivote;
     const params = {};
-    for (i = i - 1; i < this.arr.length; i++) {
-      pivote = this.arr[i][col];
+    for (; row < this.arr.length; row++) {
+      pivote = this.arr[row][col];
       
-      if (pivote > 0) {
+      if (pivote != 0) {
         params.pivote = {
-          i, j: col
+          i: row, j: col
         };
         break;
       }
     }
     
     let val, scalar;
-    i++;
-    for (; i < this.arr.length; i++) {
-      val = this.arr[i][col];
+    for (row += 1; row < this.arr.length; row++) {
+      val = this.arr[row][col];
       if (val != 0) {
         scalar = -(pivote / val);
-        params.rowToOperate = { i };
+        params.rowToOperate = { i: row };
         params.scalar = scalar;
         
+        console.log('params:', params);
         this.matrixOps(fn.CONSTANTS.ROW_OPS.SUM_SCALAR_ROWS, params);
       }
     }
