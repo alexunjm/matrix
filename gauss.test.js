@@ -42,7 +42,6 @@ test("find first no zero col", () => {
   ]);
   // logMatrix(m);
   expect(m2.getFirstNonZeroColumnIndex()).toBe(2);
-  // expect(JSON.stringify(m2.getFirstNoZeroColumnIndex({returnIJ: true}))).toBe(JSON.stringify({i: 2, j: 2}));
   expect(m2.getFirstNonZeroColumnIndex({returnIJ: true})).toEqual({i: 2, j: 2});
 });
 
@@ -68,7 +67,7 @@ test("swap rows with a matrix", () => {
     m.arr[2]
   ]);
   expect(m.swapRows(1, 2)).toEqual(m2);
-  // expect(m.swapRows(1, 2).equals(m2)).toBeTruthy();
+  expect(m.swapRows(1, 2)).toEqual(m2.swapRows(1, 2));
 });
 
 test("swap rows operations", () => {
@@ -136,9 +135,7 @@ test("operate scalar matrix", () => {
 
 });
 
-
-
-test("col operations to obtain zeros under first no zero value of matrix", () => {
+test("primera parte elim gauss", () => {
 
   const m2 = new Matrix([
     [0, 0, 5],
@@ -165,11 +162,80 @@ test("col operations to obtain zeros under first no zero value of matrix", () =>
   expect(m2.get(2, 2)).toBe(0);
   expect(m2.get(3, 2)).toBe(0);
   expect(m2.get(3, 3)).toBe(0);
-/*
-  expect(JSON.stringify(m2.arr)).toBe(JSON.stringify([
+});
+
+
+test("segunda parte elim gauss", () => {
+
+  const m2 = new Matrix([
+    [1,  0,  5],
+    [0,  2,  3],
+    [0, -2, 4.5]
+  ]);
+
+  // 1. Ir a la primera columna no cero de izquierda a derecha.
+  let {i, j} = m2.getFirstNonZeroColumnIndex({returnIJ: true, from: {i: 2, j: 2}});
+  expect(m2.get(i, j)).not.toBe(0);
+  expect(i).toBe(2);
+  expect(j).toBe(2);
+  
+  // 2. Si la primera fila tiene un cero en esta columna, intercambiarlo con otra que no lo tenga.
+  if (i != 2) {
+    m2.swapRows(2, i);
+  }
+  // [1,  0,  5],
+  // [0,  2,  3],
+  // [0, -2, 4.5]
+  /**
+   * 3. Luego, obtener ceros debajo de este elemento delantero, sumando 
+   * múltiplos adecuados del renglón superior a los renglones debajo de él.
+   *  */ 
+  m2.colOperations(j, i);
+  // [1,  0,  5],
+  // [0,  2,  3],
+  // [0,  0, 7.5]
+  expect(m2.get(3, 2)).toBe(0);
+});
+
+
+test("primera y segunda parte", () => {
+
+  const m2 = new Matrix([
     [0, 2, 3],
-    [0, 0, 5],
-    [0, 0, 0]
-  ]));*/
-  // 4. Cubrir el renglón superior y repetir el proceso anterior con la submatriz restante. Repetir con el resto de los renglones (en este punto la matriz se encuentra en forma escalonada).
+    [1, 0, 5],
+    [2, 4, 1]
+  ]);
+
+  // 1. Ir a la primera columna no cero de izquierda a derecha.
+  let {i, j} = m2.getFirstNonZeroColumnIndex({returnIJ: true});
+  
+  // 2. Si la primera fila tiene un cero en esta columna, intercambiarlo con otra que no lo tenga.
+  if (i != 1) {
+    m2.swapRows(1, i);
+  }
+  // [1, 0, 5],
+  // [0, 2, 3],
+  // [2, 4, 1]
+  /**
+   * 3. Luego, obtener ceros debajo de este elemento delantero, sumando 
+   * múltiplos adecuados del renglón superior a los renglones debajo de él.
+   *  */ 
+  m2.colOperations(j);
+  // [1,  0,  5],
+  // [0,  2,  3],
+  // [0, -2, 4.5]
+  expect(m2.get(3, 2)).toBe(-2);
+
+  const fnz = m2.getFirstNonZeroColumnIndex({returnIJ: true, from: {i: 2, j: 2}});
+  i = fnz.i;
+  j = fnz.j;
+  expect(i).toBe(2);
+  expect(j).toBe(2);
+
+  if (i != 2) {
+    m2.swapRows(2, i);
+  }
+  m2.colOperations(2, 2);
+  logMatrix(m2);
+  expect(m2.get(3, 2)).toBe(0);
 });

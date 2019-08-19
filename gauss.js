@@ -16,12 +16,15 @@ class Matrix {
   }
 
   getFirstNonZeroColumnIndex(params = {}) {
-    let [i, j, val] = [0, 0, 0];
-    for (j = 0; j < this.arr[0].length; j++) {
-      for (i = 0; i < this.arr.length; i++) {
+    let i, j, val = 0;
+    let fromi = params.from ? params.from.i - 1 : 0;
+    let fromj = params.from ? params.from.j - 1 : 0;
+    for (j = fromj; j < this.arr[0].length; j++) {
+      for (i = fromi; i < this.arr.length; i++) {
         val = this.arr[i][j];
         if (val != 0) {
           i++;j++;
+          // console.log({fnz: {i, j}});
           if (params.returnIJ) return {i, j};
           return j;
         }
@@ -70,12 +73,14 @@ class Matrix {
    * @param {*} j
    * @memberof Matrix
    */
-  colOperations(j) {
-    let col = j-1, i;
-    let pivote = 0;
+  colOperations(j, i = 1) {
+    
+    let col = j-1;
+    let pivote;
     const params = {};
-    for (i = 0; i < this.arr.length; i++) {
+    for (i = i - 1; i < this.arr.length; i++) {
       pivote = this.arr[i][col];
+      
       if (pivote > 0) {
         params.pivote = {
           i, j: col
@@ -83,11 +88,12 @@ class Matrix {
         break;
       }
     }
-
-    let [val, scalar] = [0, 0];
-    for (++i; i < this.arr.length; i++) {
+    
+    let val, scalar;
+    i++;
+    for (; i < this.arr.length; i++) {
       val = this.arr[i][col];
-      if (val > 0) {
+      if (val != 0) {
         scalar = -(pivote / val);
         params.rowToOperate = { i };
         params.scalar = scalar;
@@ -99,27 +105,23 @@ class Matrix {
   }
 
   matrixOps(op, params) {
-    console.log('operación de fila:', params);
+    // console.log('operación de fila:', params);
 
     switch (op) {
       case fn.CONSTANTS.ROW_OPS.SUM_SCALAR_ROWS:
         const pivoteRow = this.arr[params.pivote.i];
         const row = this.arr[params.rowToOperate.i];
-        console.log('row before', row);
+        // console.log('row before', row);
         for (let col = params.pivote.j; col < row.length; col++) {
           row[col] = (row[col] * params.scalar) + pivoteRow[col];
         }
-        console.log('row after', row);
+        // console.log('row after', row);
         // fn.logMatrix(this);
         break;
     
       default:
         break;
     }
-  }
-
-  showData() {
-    console.table(this.arr);
   }
 
   equals(m) {
