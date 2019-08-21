@@ -1,6 +1,6 @@
 {
   "name": "elimgauss",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "librería para trabajo con matrices",
   "main": "gauss.js",
   "dependencies": {
