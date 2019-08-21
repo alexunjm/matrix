@@ -1,0 +1,24 @@
+{
+  "name": "elimgauss",
+  "version": "0.0.1",
+  "description": "librería para trabajo con matrices",
+  "main": "gauss.js",
+  "dependencies": {
+    "jest": "^24.9.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": [
+    "gauss",
+    "eliminacion",
+    "matrices",
+    "matriz",
+    "sistemas",
+    "ecuaciones",
+    "lineales"
+  ],
+  "author": "Alexander Jaramillo",
+  "license": "ISC"
+}
