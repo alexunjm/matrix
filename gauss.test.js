@@ -189,49 +189,59 @@ test("segunda parte elim gauss", () => {
   expect(m2.get(3, 2)).toBe(0);
   logMatrix(m2);
 });
-/*
 
 test("primera y segunda parte", () => {
 
+  
   const m2 = new Matrix([
-    [0, 2, 3],
-    [1, 0, 5],
-    [2, 4, 1]
+    [ 2,  1, -1,   8],
+    [-3, -1,  2, -11],
+    [-2,  1,  2,  -3],
   ]);
 
   // 1. Ir a la primera columna no cero de izquierda a derecha.
-  let {i, j} = m2.getFirstNonZeroColumnIndex({returnIJ: true});
-  
+  let i, j, fnz;
+  fnz = m2.getFirstNonZeroColumnIndex({returnIJ: true});
+  i = fnz.i;
+  j = fnz.j;
   // 2. Si la primera fila tiene un cero en esta columna, intercambiarlo con otra que no lo tenga.
   if (i != 1) {
     m2.swapRows(1, i);
+    i = 1;
   }
-  // [1, 0, 5],
-  // [0, 2, 3],
-  // [2, 4, 1]
+  expect(m2.get(1, 1)).not.toBe(0);
+  
   /**
    * 3. Luego, obtener ceros debajo de este elemento delantero, sumando 
    * múltiplos adecuados del renglón superior a los renglones debajo de él.
-   *  / 
+   *  */ 
   m2.colOperations(j);
-  // [1,  0,  5],
-  // [0,  2,  3],
-  // [0, -2, 4.5]
-  expect(m2.get(3, 2)).toBe(-2);
 
-  const fnz = m2.getFirstNonZeroColumnIndex({returnIJ: true, from: {i: 2, j: 2}});
+  expect(m2.get(2, 1)).toBe(0);
+  expect(m2.get(3, 1)).toBe(0);
+
+  // 1. Ir a la primera columna no cero de izquierda a derecha.
+  fnz = m2.getFirstNonZeroColumnIndex({returnIJ: true, from: {i: 2, j: 2}});
   i = fnz.i;
   j = fnz.j;
-  expect(i).toBe(2);
-  expect(j).toBe(2);
 
   if (i != 2) {
     m2.swapRows(2, i);
+    i = 2;
   }
-  m2.colOperations(2, 2);
+  expect(m2.get(i, j)).not.toBe(0);
+  expect(i).toBe(2);
+  expect(j).toBe(2);
+  
+  /**
+   * 3. Luego, obtener ceros debajo de este elemento delantero, sumando 
+   * múltiplos adecuados del renglón superior a los renglones debajo de él.
+   *  */ 
+  m2.colOperations(j, i);
+  
   expect(m2.get(3, 2)).toBe(0);
+  logMatrix(m2);
 });
-
 
 test("elim gauss", () => {
 
@@ -257,7 +267,7 @@ test("elim gauss", () => {
     /**
      * 3. Luego, obtener ceros debajo de este elemento delantero, sumando 
      * múltiplos adecuados del renglón superior a los renglones debajo de él.
-     *  / 
+     *  */ 
     m2.colOperations(j, i);
     if (index == 1) {
       expect(m2.get(2, 1)).toBe(0);
